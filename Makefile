@@ -1,33 +1,21 @@
-LEX=lex
-YACC=yacc
-CC=gcc
+all: lab4
 
-LFLAGS=
-CFLAGS=-Wall -Wno-unused-label -Wno-unused -g
+lab4: lab4.lex.o
+	gcc -o $@ $+
 
-all: project2
-
-project2: project2.lex.o
-	$(CC) -o $@ $+
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+%.o: $.c
+	gcc -c -o $@ $<
 
 %.lex.c: %.l
-	$(LEX) $(LFLAGS) -o $@ $<
+	lex -o $@ $<
 
-%.tex: %.c lab2.l
-	./project2 < $< > $@
-	
-%.pdf: %.tex
-	pdflatex $<
+a.out: test.c lab4
+	./lab4 < $< > $@
 
-test: project2 test.out
+test: lab4 a.out
 
 clean:
 	$(RM) *.o
 	$(RM) *.lex.c
-	$(RM) *.tex *.log *.aux *.pdf
-	$(RM) html2latex
-
-.PHONY: clean all test
+	$(RM) *.out
+	$(RM) lab4
