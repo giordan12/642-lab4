@@ -1,14 +1,16 @@
 %{
 	#include <stdio.h>
 	#include <string.h>
-	#include <stdblib.h>
+	#include <stdlib.h>
 
-}
+%}
 
-%option noyyweap nounput yylineno
-%x MULCOMMENT COMMENT PARA PRE OL UL LI
-
+%option noyywrap nounput yylineno
+%x		MULTCOMMENT COMMENT PREPROC PARA PRE OL UL LI
+ID [a-zA-Z][a-zA-Z0-9_]*
 %%
+
+
 "/*" {
 	BEGIN MULTCOMMENT;
 }
@@ -25,7 +27,7 @@
 	BEGIN 0;
 }
 
-<MULTCOMMENT>.{
+<MULTCOMMENT>. {
 
 }
 
@@ -63,8 +65,6 @@
 	//ignore anything symbol that appears
 }
 
-
-
 "(" {
 	printf("(\n");
 }
@@ -89,17 +89,13 @@
 	printf("]");
 }
 
+
 "," {
 	printf(",\n");
 }
 
 ";" {
 	printf(";\n");
-}
-
-{ID} {
-	printf("ID\n");
-	return ID;
 }
 
 
@@ -118,6 +114,8 @@
 "\""[^<]*"\"" {
 	printf("STRVAL\n");
 }
+
+
  "'"[^<]*"'" {
  	printf("CHARVAL\n");
  }
@@ -127,7 +125,7 @@
 }
 
 "char" {
-	prtinf("CHAR\n");
+	printf("CHAR\n");
 }
 
 "short" {
@@ -137,6 +135,7 @@
 "int" {
 	printf("INT\n");
 }
+
 
 "long" {
 	printf("LONG\n");
@@ -159,7 +158,7 @@
 }
 
 ">=" {
-	prinft("GE\n");
+	printf("GE\n");
 }
 
 "<=" {
@@ -259,7 +258,7 @@
 }
 
 "^=" {
-	PRINTF("SETXOR\n");
+	printf("SETXOR\n");
 }
 
 "<<=" {
@@ -267,7 +266,7 @@
 }
 
 ">>=" {
-	prinf("SETRSH\n");
+	printf("SETRSH\n");
 }
 
  "return" {
@@ -288,6 +287,7 @@
 
 "switch" {
 	printf("SWITCH\n");
+}
 
 "case" {
 	printf("CASE\n");
@@ -357,12 +357,9 @@
 	printf("SIZEOF\n");
 }
 
-
-
-
-
-
-
+{ID} {
+	printf("ID\n");
+}
 
 . {
 	//ignore anything here
@@ -379,7 +376,7 @@
 
 %%
 
-int main( int argc, const char *argc[]){
+int main( int argc, const char *argv[]){
 	while(yylex()){
 
 	}
